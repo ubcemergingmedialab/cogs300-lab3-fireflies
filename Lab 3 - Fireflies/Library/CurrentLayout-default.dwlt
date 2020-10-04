@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 678, y: 492}
   m_MaxSize: {x: 14002, y: 14042}
   vertical: 0
-  controlID: 54
+  controlID: 102
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 492}
   m_MaxSize: {x: 10001, y: 14042}
   vertical: 1
-  controlID: 55
+  controlID: 15
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_MinSize: {x: 402, y: 221}
   m_MaxSize: {x: 8002, y: 4021}
   vertical: 0
-  controlID: 56
+  controlID: 16
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -394,9 +394,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 16340000
       m_LastClickedID: 0
-      m_ExpandedIDs: 78a6fffff6a7ffff88a9ffff8eabffffaaabffff36acffff44afffffc0c4ffff28ccffff34fbffffcc330000ac360000
+      m_ExpandedIDs: e8f7ffff6ef9ffff60fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -504,9 +504,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.301767, y: -0.27716416, z: 0.09216163, w: 0.9075438}
+    m_Target: {x: 0.19961224, y: -0.021462271, z: 0.004370738, w: 0.9796382}
     speed: 2
-    m_Value: {x: 0.30176508, y: -0.2771624, z: 0.09216105, w: 0.90753806}
+    m_Value: {x: 0.19961068, y: -0.021462101, z: 0.0043707034, w: 0.97963053}
   m_Size:
     m_Target: 2.3887854
     speed: 2
@@ -606,15 +606,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Scenes
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Jason\cogs300-unity-lab\cogs300-lab-dev\lab3-fireflies\Lab
-    3 - Fireflies
+  m_LastProjectPath: C:\Jason\cogs300-unity-lab\lab3-fireflies\Lab 3 - Fireflies
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 5}
-    m_SelectedIDs: 1c340000
-    m_LastClickedID: 13340
-    m_ExpandedIDs: 000000000e340000143400001e34000000ca9a3b
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: fa330000
+    m_LastClickedID: 13306
+    m_ExpandedIDs: 00000000f033000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -642,7 +641,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000000e340000
+    m_ExpandedIDs: 00000000f0330000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
