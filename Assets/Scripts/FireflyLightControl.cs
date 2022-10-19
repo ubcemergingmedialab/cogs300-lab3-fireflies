@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FireflyLightControl : MonoBehaviour
 {
+
     //How slower the regular flashing cycle will be compared to real fireflies
     //At 1, the cycle will take approx. the same time as a real firefly (around 1s)
     //Increasing this value will increase the time it takes for each cycle
