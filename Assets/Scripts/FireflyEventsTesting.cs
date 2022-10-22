@@ -5,6 +5,8 @@ using UnityEngine;
 public class FireflyEventsTesting : MonoBehaviour
 {
     public Rigidbody rb;
+
+    public Light lightsource;
     public int sightDistance = 5;
 
     const int chargeThreshold = 800;
@@ -29,6 +31,7 @@ public class FireflyEventsTesting : MonoBehaviour
         EventManager.current.OnFireflyFlash += SenseFlashes;
         chargingProgress = Random.Range(0,700);
         StartCoroutine(Charge());
+        lightsource.intensity = 0;
     }
 
 
@@ -47,12 +50,13 @@ public class FireflyEventsTesting : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
            rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
-           rb.velocity.Normalize();
-           rb.velocity *= 5;
         }
 
         if(rb.velocity.sqrMagnitude != 3.5f*3.5f){
             rb.velocity = rb.velocity.normalized * 3.5f;
+        }
+        if(rb.velocity != Vector3.zero){
+         transform.forward = rb.velocity;
         }
     }
 
@@ -62,14 +66,22 @@ public class FireflyEventsTesting : MonoBehaviour
     }
 
     IEnumerator FlashColor(){
-        TurnYellow();
+        // TurnYellow();
+        // lightsource.SetActive(true);
         while(flashProgress < flashTimer){
             flashProgress++;
-
+            if(flashProgress < 100){
+                lightsource.intensity += 0.01f;
+            }
+            else{
+                lightsource.intensity -= 0.01f;
+            }
             yield return new WaitForSeconds(0.001f);
         }
         flashProgress = 0;
-        TurnWhite();
+        lightsource.intensity = 0f;
+        // lightsource.SetActive(false);
+        // TurnWhite();
     }
 
     void TurnYellow()
@@ -86,6 +98,7 @@ public class FireflyEventsTesting : MonoBehaviour
     IEnumerator Charge(){
         while (chargingProgress < chargeThreshold){
             chargingProgress++;
+            
 
             yield return new WaitForSeconds(0.001f);
         }
