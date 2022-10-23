@@ -44,7 +44,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.98225695, b: 0.033018887, a: 1}
   m_Intensity: 1
-  m_Range: 3
+  m_Range: 2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -103,13 +103,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1064478271910999114}
   - component: {fileID: 3893613783104873249}
+  - component: {fileID: 2639085876699737773}
   - component: {fileID: 7896175161868826351}
   - component: {fileID: 729585889578949933}
   - component: {fileID: 1964932116306690070}
   - component: {fileID: 8792804762638446113}
   m_Layer: 0
   m_Name: Firefly
-  m_TagString: Untagged
+  m_TagString: Firefly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -123,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 4417547229695012700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4412277721347523397}
   - {fileID: 7428330442801135566}
@@ -146,6 +147,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2639085876699737773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4417547229695012700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79644dfbfcfc296499fce73d0e2123a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoothDamp: 1
 --- !u!114 &7896175161868826351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3893613783104873249}
   lightsource: {fileID: 879908200013014099}
-  sightDistance: 5
+  sightDistance: 10
   flashProgress: 0
   chargingProgress: 0
   sendingProgress: 0
@@ -174,7 +188,7 @@ SphereCollider:
   m_GameObject: {fileID: 4417547229695012700}
   m_Material: {fileID: 13400000, guid: fcd9c005cca81084faf60d81c3134dc7, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.86
   m_Center: {x: 0.37, y: 0, z: 0}

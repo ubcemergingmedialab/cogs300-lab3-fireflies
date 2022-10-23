@@ -7,29 +7,38 @@ public class FireflyEventsTesting : MonoBehaviour
     public Rigidbody rb;
 
     public Light lightsource;
-    public int sightDistance = 5;
+    public int sightDistance;
 
-    const int chargeThreshold = 800;
+   const float delayMultiplier = 0.1f;
 
-    const int sendDelay = 200;
+    // Each of the following represents a number of milliseconds
 
-    const int waitDelay = 200;
+    //The time it takes to reach the top of the threshold. 
+    //Represented by THRESHOLD LEVEL (dotted line) in the diagram
+    const float chargeThreshold = 800 * delayMultiplier;
 
-    const int flashTimer = 200;
+    //The time between message sending and light flashing. 
+    //Represented by timescale distance between MESSAGE and FLASH on diagram
+    const float sendDelay = 200 * delayMultiplier; 
 
-    public int flashProgress = 0;
+    //The time between message sending and the chargingProcess restarting from zero. 
+    //Represented by timescale distance between MESSAGE and the bottom of the chargingProgress on diagram
+    const float waitDelay = 200 * delayMultiplier; 
+    const float flashTimer = 200 * delayMultiplier;
 
-    public int chargingProgress = 0;
+    public float flashProgress = 0;
 
-    public int sendingProgress = 0;
-    public int waitProgress = 0;
+    public float chargingProgress = 0;
+
+    public float sendingProgress = 0;
+    public float waitProgress = 0;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
+        // rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
         EventManager.current.OnFireflyFlash += SenseFlashes;
-        chargingProgress = Random.Range(0,700);
+        chargingProgress = Random.Range(0,chargeThreshold);
         StartCoroutine(Charge());
         lightsource.intensity = 0;
     }
@@ -37,27 +46,30 @@ public class FireflyEventsTesting : MonoBehaviour
 
     private void SenseFlashes(Vector3 position){
         float distance = Vector3.Distance(this.transform.position, position);
+        
         if(distance > 0 && distance < sightDistance){
             chargingProgress = 0;
             waitProgress = waitDelay;
         }
+        
+        
         
     }
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKeyDown("space"))
-        {
-           rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
-        }
+        // if (Input.GetKeyDown("space"))
+        // {
+        //    rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
+        // }
 
-        if(rb.velocity.sqrMagnitude != 3.5f*3.5f){
-            rb.velocity = rb.velocity.normalized * 3.5f;
-        }
-        if(rb.velocity != Vector3.zero){
-         transform.forward = rb.velocity;
-        }
+        // if(rb.velocity.sqrMagnitude != 3.5f*3.5f){
+        //     rb.velocity = rb.velocity.normalized * 3.5f;
+        // }
+        // if(rb.velocity != Vector3.zero){
+        //  transform.forward = rb.velocity;
+        // }
     }
 
     private void Flash(){
@@ -70,11 +82,11 @@ public class FireflyEventsTesting : MonoBehaviour
         // lightsource.SetActive(true);
         while(flashProgress < flashTimer){
             flashProgress++;
-            if(flashProgress < 100){
-                lightsource.intensity += 0.01f;
+            if(flashProgress < flashTimer/2){
+                lightsource.intensity += 0.02f / delayMultiplier;
             }
             else{
-                lightsource.intensity -= 0.01f;
+                lightsource.intensity -= 0.02f / delayMultiplier;
             }
             yield return new WaitForSeconds(0.001f);
         }
