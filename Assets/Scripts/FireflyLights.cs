@@ -2,29 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireflyEventsTesting : MonoBehaviour
+public class FireflyLights : MonoBehaviour
 {
     public Rigidbody rb;
 
     public Light lightsource;
     public int sightDistance;
 
-   const float delayMultiplier = 0.1f;
+    public float delayMultiplier = 0.1f;
 
     // Each of the following represents a number of milliseconds
 
     //The time it takes to reach the top of the threshold. 
     //Represented by THRESHOLD LEVEL (dotted line) in the diagram
-    const float chargeThreshold = 800 * delayMultiplier;
+     float chargeThreshold = 800;
 
     //The time between message sending and light flashing. 
     //Represented by timescale distance between MESSAGE and FLASH on diagram
-    const float sendDelay = 200 * delayMultiplier; 
+     float sendDelay = 200;
 
     //The time between message sending and the chargingProcess restarting from zero. 
     //Represented by timescale distance between MESSAGE and the bottom of the chargingProgress on diagram
-    const float waitDelay = 200 * delayMultiplier; 
-    const float flashTimer = 200 * delayMultiplier;
+     float waitDelay = 200;
+     float flashTimer = 200;
 
     public float flashProgress = 0;
 
@@ -35,6 +35,11 @@ public class FireflyEventsTesting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        chargeThreshold *= delayMultiplier;
+        sendDelay *= delayMultiplier; 
+        waitDelay *= delayMultiplier; 
+        flashTimer *= delayMultiplier;
+
         rb = GetComponent<Rigidbody>();
         // rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
         EventManager.current.OnFireflyFlash += SenseFlashes;
@@ -55,22 +60,6 @@ public class FireflyEventsTesting : MonoBehaviour
         
         
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-        // if (Input.GetKeyDown("space"))
-        // {
-        //    rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
-        // }
-
-        // if(rb.velocity.sqrMagnitude != 3.5f*3.5f){
-        //     rb.velocity = rb.velocity.normalized * 3.5f;
-        // }
-        // if(rb.velocity != Vector3.zero){
-        //  transform.forward = rb.velocity;
-        // }
-    }
 
     private void Flash(){
         StartCoroutine(FlashColor());
@@ -78,8 +67,6 @@ public class FireflyEventsTesting : MonoBehaviour
     }
 
     IEnumerator FlashColor(){
-        // TurnYellow();
-        // lightsource.SetActive(true);
         while(flashProgress < flashTimer){
             flashProgress++;
             if(flashProgress < flashTimer/2){
@@ -92,19 +79,6 @@ public class FireflyEventsTesting : MonoBehaviour
         }
         flashProgress = 0;
         lightsource.intensity = 0f;
-        // lightsource.SetActive(false);
-        // TurnWhite();
-    }
-
-    void TurnYellow()
-    {
-        Color col = new Color(252, 207, 0);
-        GetComponent<Renderer>().material.color = col;
-    }
-
-    void TurnWhite(){
-        Color col = new Color(200, 200, 200);
-        GetComponent<Renderer>().material.color = col;
     }
 
     IEnumerator Charge(){

@@ -6,10 +6,25 @@ public class Flock : MonoBehaviour
 {
     // Start is called before the first frame update
 
+
+    // -------- STUDENTS CAN IGNORE THIS FILE --------
+
     [Header("Spawn Setup")]
     public FlockUnit firefly;
     public int spawnNumber = 100;
+    
     public FlockUnit[] allFireflies {get; set;}
+
+        [Header("Flashing Setup (Cannot be changed during runtime)")]
+
+    [Range(0, 10)]
+    [SerializeField] private int _sightDistance;
+    public int sightDistance {get {return _sightDistance;}}
+
+    [Range(0, 5)]
+    [SerializeField] private float _delayMultiplier;
+    public float delayMultiplier {get {return _delayMultiplier;}}
+
 
     [Header("Speed Setup")]
     [Range(0, 10)]
@@ -19,7 +34,11 @@ public class Flock : MonoBehaviour
     [SerializeField] private float _maxSpeed;
     public float maxSpeed {get {return _maxSpeed;}}
 
+   
     [Header("Detection Distances")]
+    [Header("--------Flocking Behaviours-----------")]
+
+   
     [Range(0, 10)]
     [SerializeField] private float _cohesionDistance;
     public float cohesionDistance {get {return _cohesionDistance;}}
@@ -29,6 +48,9 @@ public class Flock : MonoBehaviour
     [Range(0, 10)]
     [SerializeField] private float _avoidanceDistance;
     public float avoidanceDistance {get {return _avoidanceDistance;}}
+
+    
+
 
     [Range(0, 10)]
     [SerializeField] private float _boundsDistance;
@@ -58,6 +80,7 @@ public class Flock : MonoBehaviour
     {
         for(int i = 0; i < allFireflies.Length; i++){
             allFireflies[i].MoveUnit();
+
         }
     }
 
@@ -69,6 +92,9 @@ public class Flock : MonoBehaviour
             newFirefly.transform.position = new Vector3(Random.Range(-20, 20),Random.Range(-20, 20),Random.Range(-20, 20));
             newFirefly.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
             newFirefly.transform.parent = this.transform;
+            FireflyLights lightsScript = newFirefly.GetComponent<FireflyLights>();
+            lightsScript.sightDistance = _sightDistance;
+            lightsScript.delayMultiplier = _delayMultiplier;
             newFirefly.InititializeSpeed(Random.Range(minSpeed, maxSpeed));
             newFirefly.AssignFlock(this);
         }
