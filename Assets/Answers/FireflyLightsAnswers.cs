@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireflyLights : MonoBehaviour
+public class FireflyLightsAnswers : MonoBehaviour
 {
     public Rigidbody rb;
 
@@ -49,31 +49,31 @@ public class FireflyLights : MonoBehaviour
     }
 
     IEnumerator Charge(){
-        while (false){ //TODO: change the logic here so that the firefly charges up until the threshold
+        while (chargingProgress < chargeThreshold){ //TODO: change the logic here so that the firefly charges up until the threshold
             //TODO: Charge the firefly
-            
+            chargingProgress++;
             
 
             yield return new WaitForSeconds(0.001f);
         }
         //TODO: After you are done charging, reset your variables and call the next function(s) to continue the flashing cycle
-        
-
-
+        chargingProgress = 0;
+        waitProgress = 0;
+        StartCoroutine(SendMessageToFlash());
+        StartCoroutine(WaitToCharge());
     }
 
     IEnumerator SendMessageToFlash() {
-        while (false) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
+        while (sendingProgress < sendDelay) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
             //TODO: keep track of how long you've been waiting here
-            
-
+            sendingProgress++;
 
             yield return new WaitForSeconds(0.001f);
         }
         Flash();
 
         //TODO: Don't forget to reset your variables!
-        
+        sendingProgress = 0;
         
 
     }
@@ -81,17 +81,16 @@ public class FireflyLights : MonoBehaviour
     // Wait will increment Waiting progress by 1 every 0.001s, stopping when it hits the threshold,
     // Used to control the timing between when a message is sent to flash and when the firefly begins charging again
     IEnumerator WaitToCharge() {
-        while (false) { //TODO: Change logic here so the firefly begins charging again at the right time
+        while (waitProgress < waitDelay) { //TODO: Change logic here so the firefly begins charging again at the right time
             //TODO: Keep track of how long you've been waiting
-            
-
+            waitProgress++;
 
             yield return new WaitForSeconds(0.001f);
         }
         
         //TODO: Reset your variables and call the next function in the sequence
-        
-
+        waitProgress = 0;
+        StartCoroutine(Charge());
 
     }
 
