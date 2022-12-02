@@ -101,8 +101,9 @@ public class FireflyLights : MonoBehaviour
         if(distance > 0 && distance < sightDistance){
             //TODO: Implement what should happen when the firefly sees another nearby flash. 
             //What should change? Be sure to think about both late and early flashes.
-            chargingProgress = 0;
-            waitProgress = waitDelay;
+            
+
+            
         }
     }
 
