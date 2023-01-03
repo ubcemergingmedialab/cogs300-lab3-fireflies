@@ -9,7 +9,7 @@ public class FireflyLights : MonoBehaviour
     public Light lightsource;
     public int sightDistance;
 
-    public float delayMultiplier = 0.1f;
+    public float delayMultiplier = 1f;
 
     // Each of the following represents a number of milliseconds
 
@@ -24,7 +24,7 @@ public class FireflyLights : MonoBehaviour
     //The time between message sending and the chargingProcess restarting from zero. 
     //Represented by timescale distance between MESSAGE and the bottom of the chargingProgress on diagram
      float waitDelay = 200;
-     float flashTimer = 200;
+     float flashTimer = 400;
 
     public float flashProgress = 0;
 
@@ -68,12 +68,12 @@ public class FireflyLights : MonoBehaviour
 
     IEnumerator FlashColor(){
         while(flashProgress < flashTimer){
-            flashProgress++;
+            flashProgress += Time.deltaTime * 1000;
             if(flashProgress < flashTimer/2){
-                lightsource.intensity += 0.02f / delayMultiplier;
+                lightsource.intensity += 0.04f * Time.deltaTime * 100 / delayMultiplier;
             }
             else{
-                lightsource.intensity -= 0.02f / delayMultiplier;
+                lightsource.intensity -= 0.04f * Time.deltaTime * 100 / delayMultiplier;
             }
             yield return new WaitForSeconds(0.001f);
         }
@@ -83,7 +83,7 @@ public class FireflyLights : MonoBehaviour
 
     IEnumerator Charge(){
         while (chargingProgress < chargeThreshold){
-            chargingProgress++;
+            chargingProgress += Time.deltaTime * 1000;
             
 
             yield return new WaitForSeconds(0.001f);
@@ -95,7 +95,7 @@ public class FireflyLights : MonoBehaviour
     IEnumerator SendMessageToFlash() {
         while (sendingProgress < sendDelay) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
             //TODO: keep track of how long you've been waiting here
-            sendingProgress++;
+            sendingProgress += Time.deltaTime * 1000;
 
             yield return new WaitForSeconds(0.001f);
         }
@@ -113,7 +113,7 @@ public class FireflyLights : MonoBehaviour
     IEnumerator WaitToCharge() {
         while (waitProgress < waitDelay) { //TODO: Change logic here so the firefly begins charging again at the right time
             //TODO: Keep track of how long you've been waiting
-            waitProgress++;
+            waitProgress += Time.deltaTime * 1000;
 
             yield return new WaitForSeconds(0.001f);
         }
