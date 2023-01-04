@@ -12,6 +12,7 @@ public class Flock : MonoBehaviour
     [Header("Spawn Setup")]
     public FlockUnit firefly;
     public int spawnNumber = 100;
+
     
     public FlockUnit[] allFireflies {get; set;}
 
@@ -80,16 +81,19 @@ public class Flock : MonoBehaviour
     {
         for(int i = 0; i < allFireflies.Length; i++){
             allFireflies[i].MoveUnit();
-
         }
     }
 
     private void GenerateFireflies(){
         allFireflies = new FlockUnit[spawnNumber];
-        for(int i = 0; i < spawnNumber; i++){
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float z = transform.position.z;
+        for (int i = 0; i < spawnNumber; i++){
             FlockUnit newFirefly = Instantiate(firefly);
             allFireflies[i] = newFirefly;
-            newFirefly.transform.position = new Vector3(Random.Range(-20, 20),Random.Range(-20, 20),Random.Range(-20, 20));
+            
+            newFirefly.transform.position = new Vector3(Random.Range(x - 20 , x + 20),Random.Range(y - 20, y + 20),Random.Range(z - 20, z + 20));
             newFirefly.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
             newFirefly.transform.parent = this.transform;
             FireflyLights lightsScript = newFirefly.GetComponent<FireflyLights>();
