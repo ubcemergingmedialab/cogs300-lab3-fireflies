@@ -41,7 +41,6 @@ public class FireflyLights : MonoBehaviour
         flashTimer *= delayMultiplier;
 
         rb = GetComponent<Rigidbody>();
-        // rb.velocity = new Vector3(Random.Range(-5, 5),Random.Range(-5, 5),Random.Range(-5, 5));
         EventManager.current.OnFireflyFlash += SenseFlashes;
         chargingProgress = Random.Range(0,chargeThreshold);
         StartCoroutine(Charge());
@@ -93,15 +92,12 @@ public class FireflyLights : MonoBehaviour
     }
 
     IEnumerator SendMessageToFlash() {
-        while (sendingProgress < sendDelay) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
+        while (false) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
             //TODO: keep track of how long you've been waiting here
-            sendingProgress += Time.deltaTime * 1000;
+          
 
             yield return new WaitForSeconds(0.001f);
         }
-        sendingProgress = 0;
-        Flash();
-        StartCoroutine(WaitToCharge());
 
         //TODO: Don't forget to reset your variables!
         
@@ -111,16 +107,14 @@ public class FireflyLights : MonoBehaviour
     // Wait will increment Waiting progress by 1 every 0.001s, stopping when it hits the threshold,
     // Used to control the timing between when a message is sent to flash and when the firefly begins charging again
     IEnumerator WaitToCharge() {
-        while (waitProgress < waitDelay) { //TODO: Change logic here so the firefly begins charging again at the right time
+        while (false) { //TODO: Change logic here so the firefly begins charging again at the right time
             //TODO: Keep track of how long you've been waiting
-            waitProgress += Time.deltaTime * 1000;
+         
 
             yield return new WaitForSeconds(0.001f);
         }
         
         //TODO: Reset your variables and call the next function in the sequence
-        waitProgress = 0;
-        StartCoroutine(Charge());
 
     }
 }
