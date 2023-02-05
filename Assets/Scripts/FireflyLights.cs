@@ -9,7 +9,7 @@ public class FireflyLights : MonoBehaviour
     public Light lightsource;
     public int sightDistance;
 
-    public float delayMultiplier = 1f;
+    public float delayMultiplier;
 
     // Each of the following represents a number of milliseconds
 
@@ -47,16 +47,61 @@ public class FireflyLights : MonoBehaviour
         lightsource.intensity = 0;
     }
 
+    // Charge will increment chargingProgress every 0.001s, stopping when it hits the threshold. 
+    // Used to control when the message is sent to flash
+    IEnumerator Charge(){
+        while (false){ //TODO: change the logic here so that the firefly charges up until the threshold
+            //TODO: Charge the firefly
+            
+
+            yield return new WaitForSeconds(0.001f);
+        }
+        
+        //TODO: After you are done charging, reset any variables you need to and call the next function(s) in the cycle
+        // Remember these function call should be wrapped in StartCoroutine();
+
+
+    }
+
+    // Wait will increment Waiting progress every 0.001s, stopping when it hits the threshold,
+    // Used to control the timing between when a message is sent to flash and when the firefly begins charging again
+    IEnumerator WaitToCharge() {
+        while (false) { //TODO: Change logic here so the firefly begins charging again at the right time
+            //TODO: Keep track of how long you've been waiting
+         
+
+            yield return new WaitForSeconds(0.001f);
+        }
+        
+        //TODO: Reset your variables and call the next function in the sequence
+
+    }
+
+    // SendMessageToFlash will increment sendingProgress every 0.001s, stopping when it hits the threshold.
+    // Used to control when a flash is emitted after the message to flash has been sent
+    IEnumerator SendMessageToFlash() {
+        while (sendingProgress < sendDelay) { 
+            // keeps track of how long you've been waiting here
+            sendingProgress += Time.deltaTime * 1000;
+
+            yield return new WaitForSeconds(0.001f);
+        }
+
+        sendingProgress = 0;
+        Flash();
+    }
 
     private void SenseFlashes(Vector3 position){
         float distance = Vector3.Distance(this.transform.position, position);
         
         if(distance > 0 && distance < sightDistance){
-            chargingProgress = 0;
-            waitProgress = waitDelay;
+            // Code inside will be run when the firefly sees another flash nearby.
+            //TODO: Implement what should happen when the firefly sees another flash. 
+            // What should change? Be sure to think about both late and early flashes.
+
+
+
         }
-        
-        
         
     }
 
@@ -80,41 +125,9 @@ public class FireflyLights : MonoBehaviour
         lightsource.intensity = 0f;
     }
 
-    IEnumerator Charge(){
-        while (chargingProgress < chargeThreshold){
-            chargingProgress += Time.deltaTime * 1000;
-            
-
-            yield return new WaitForSeconds(0.001f);
-        }
-        chargingProgress = 0;
-        StartCoroutine(SendMessageToFlash());
-    }
-
-    IEnumerator SendMessageToFlash() {
-        while (false) { //TODO: Change the logic here so that the firefly flashes at the appropriate time
-            //TODO: keep track of how long you've been waiting here
-          
-
-            yield return new WaitForSeconds(0.001f);
-        }
-
-        //TODO: Don't forget to reset your variables!
-        
-
-    }
-
-    // Wait will increment Waiting progress by 1 every 0.001s, stopping when it hits the threshold,
-    // Used to control the timing between when a message is sent to flash and when the firefly begins charging again
-    IEnumerator WaitToCharge() {
-        while (false) { //TODO: Change logic here so the firefly begins charging again at the right time
-            //TODO: Keep track of how long you've been waiting
-         
-
-            yield return new WaitForSeconds(0.001f);
-        }
-        
-        //TODO: Reset your variables and call the next function in the sequence
-
+    void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            EventManager.current.FireflyFlash(this.transform.position + new Vector3(1f,1f,1f));
+        } 
     }
 }
