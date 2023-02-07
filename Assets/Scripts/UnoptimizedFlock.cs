@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flock : MonoBehaviour
+public class UnoptimizedFlock : MonoBehaviour
 {
     // Start is called before the first frame update
 
@@ -10,10 +10,11 @@ public class Flock : MonoBehaviour
     // -------- STUDENTS CAN IGNORE THIS FILE --------
 
     [Header("Spawn Setup")]
-    public FlockUnit firefly;
+    public UnoptimizedFlockUnit firefly;
     public int spawnNumber = 100;
 
-    public FlockUnit[] allFireflies { get; set; }
+
+    public UnoptimizedFlockUnit[] allFireflies { get; set; }
 
     [Header("Flashing Setup (Cannot be changed during runtime)")]
 
@@ -78,54 +79,24 @@ public class Flock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveFireflies();
-    }
-
-    private void MoveFireflies()
-    {
         for (int i = 0; i < allFireflies.Length; i++)
         {
-            //reset the vectors for the current FF
-            allFireflies[i].ResetVectors();
-
-            //clear neighbours
-            allFireflies[i].ClearNeighbours();
-
-            for (int j = i; j < allFireflies.Length; j++)
-            {
-                //we don't need to look at the same FF
-                if (i != j)
-                {
-                    float currentNeighbourDistanceSqr = Vector3.SqrMagnitude(allFireflies[j].transform.position - allFireflies[i].transform.position);
-                    if (currentNeighbourDistanceSqr <= cohesionDistance * cohesionDistance)
-                    {
-                        allFireflies[i].AddCohesionNeighbour(allFireflies[j]);
-                        allFireflies[j].AddCohesionNeighbour(allFireflies[i]);
-                    }
-                    if (currentNeighbourDistanceSqr <= alignmentDistance * alignmentDistance)
-                    {
-                        allFireflies[i].AddAlignmentNeighbours(allFireflies[j]);
-                        allFireflies[j].AddAlignmentNeighbours(allFireflies[i]);
-                    }
-                    if (currentNeighbourDistanceSqr <= avoidanceDistance * avoidanceDistance)
-                    {
-                        allFireflies[i].AddAvoidanceNeighbours(allFireflies[j]);
-                        allFireflies[j].AddAvoidanceNeighbours(allFireflies[i]);
-                    }
-                }
-            }
             allFireflies[i].MoveUnit();
         }
     }
 
     private void GenerateFireflies()
     {
-        allFireflies = new FlockUnit[spawnNumber];
+        allFireflies = new UnoptimizedFlockUnit[spawnNumber];
+        float x = transform.position.x;
+        float y = transform.position.y;
+        float z = transform.position.z;
         for (int i = 0; i < spawnNumber; i++)
         {
-            FlockUnit newFirefly = Instantiate(firefly);
+            UnoptimizedFlockUnit newFirefly = Instantiate(firefly);
             allFireflies[i] = newFirefly;
-            newFirefly.transform.position = new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20));
+
+            newFirefly.transform.position = new Vector3(Random.Range(x - 20, x + 20), Random.Range(y - 20, y + 20), Random.Range(z - 20, z + 20));
             newFirefly.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
             newFirefly.transform.parent = this.transform;
             FireflyLights lightsScript = newFirefly.GetComponent<FireflyLights>();
