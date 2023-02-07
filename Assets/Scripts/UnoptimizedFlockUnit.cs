@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlockUnit : MonoBehaviour
+public class UnoptimizedFlockUnit : MonoBehaviour
 {
+
     [SerializeField] private float smoothDamp;
-    private List<FlockUnit> cohesionNeighbours = new List<FlockUnit>();
-    private List<FlockUnit> alignmentNeighbours = new List<FlockUnit>();
-    private List<FlockUnit> avoidanceNeighbours = new List<FlockUnit>();
-    private Flock assignedFlock;
+    private List<UnoptimizedFlockUnit> cohesionNeighbours = new List<UnoptimizedFlockUnit>();
+    private List<UnoptimizedFlockUnit> alignmentNeighbours = new List<UnoptimizedFlockUnit>();
+    private List<UnoptimizedFlockUnit> avoidanceNeighbours = new List<UnoptimizedFlockUnit>();
+    private UnoptimizedFlock assignedFlock;
     private Vector3 currentVelocity;
     private float speed;
-    private Vector3 avoidanceVector;
-    private Vector3 alignmentVector;
-    private Vector3 cohesionVector;
 
     public Transform myTransform { get; set; }
 
@@ -22,7 +20,7 @@ public class FlockUnit : MonoBehaviour
         myTransform = transform;
     }
 
-    public void AssignFlock(Flock flock)
+    public void AssignFlock(UnoptimizedFlock flock)
     {
         assignedFlock = flock;
     }
@@ -32,15 +30,27 @@ public class FlockUnit : MonoBehaviour
         this.speed = speed;
     }
 
-
+    //Note: being called every update from flock.update().  BigO is as summarized:
+    //n = number of ff
+    //cohesion vector = n * cv
+    //avoidance vector = n * avoidv
+    //align vector = n * alignv
+    //Calculatespeed = n * cv
+    //boundsVector = n * 1 (constant time)
+    //Findneighbours = n^2 (see below)
+    // each FF looks at every other FF and does calculations.  It might be possible to reduce it to (n^2 / 2)?
+    // ex: if ffA decides it needs to add ffB to cohesionNeighbours, then it must be same for ffB in relation to ffA.
+    // this is the same for avoidanceNeighbours, alignment neighbours etc.
     public void MoveUnit()
     {
+        FindNeighbours();
         CalculateSpeed();
 
         var cohesionVector = CalculateCohesionVector() * assignedFlock.cohesionWeight;
         var avoidanceVector = CalculateAvoidanceVector() * assignedFlock.avoidanceWeight;
         var alignmentVector = CalculateAlignmentVector() * assignedFlock.alignmentWeight;
         var boundsVector = CalculateBoundsVector() * assignedFlock.boundsWeight;
+
 
         var moveVector = cohesionVector + avoidanceVector + alignmentVector + boundsVector;
         moveVector = Vector3.SmoothDamp(myTransform.forward, moveVector, ref currentVelocity, smoothDamp);
@@ -53,45 +63,45 @@ public class FlockUnit : MonoBehaviour
         myTransform.position += moveVector * Time.deltaTime;
     }
 
-    public void AddCohesionNeighbour(FlockUnit flockUnit)
-    {
-        cohesionNeighbours.Add(flockUnit);
-        speed += flockUnit.speed;
-    }
-
-    public void AddAlignmentNeighbours(FlockUnit flockUnit)
-    {
-        alignmentNeighbours.Add(flockUnit);
-        alignmentVector += flockUnit.myTransform.forward;
-    }
-
-    public void AddAvoidanceNeighbours(FlockUnit flockUnit)
-    {
-        avoidanceNeighbours.Add(flockUnit);
-        avoidanceVector += (myTransform.position - flockUnit.myTransform.position);
-    }
-
-    public void ResetVectors()
-    {
-        speed = 0;
-        avoidanceVector = Vector3.zero;
-        alignmentVector = myTransform.forward;
-        cohesionVector = Vector3.zero;
-    }
-
-    public void ClearNeighbours()
+    private void FindNeighbours()
     {
         cohesionNeighbours.Clear();
         alignmentNeighbours.Clear();
         avoidanceNeighbours.Clear();
+        var allFireflies = assignedFlock.allFireflies;
+        for (int i = 0; i < assignedFlock.spawnNumber; i++)
+        {
+            var currentUnit = allFireflies[i];
+            if (currentUnit != this)
+            {
+                float currentNeighbourDistanceSqr = Vector3.SqrMagnitude(currentUnit.transform.position - transform.position);
+                if (currentNeighbourDistanceSqr <= assignedFlock.cohesionDistance * assignedFlock.cohesionDistance)
+                {
+                    cohesionNeighbours.Add(currentUnit);
+                }
+                if (currentNeighbourDistanceSqr <= assignedFlock.alignmentDistance * assignedFlock.alignmentDistance)
+                {
+                    alignmentNeighbours.Add(currentUnit);
+                }
+                if (currentNeighbourDistanceSqr <= assignedFlock.avoidanceDistance * assignedFlock.avoidanceDistance)
+                {
+                    avoidanceNeighbours.Add(currentUnit);
+                }
+            }
+        }
     }
 
     private void CalculateSpeed()
     {
+        speed = 0;
         if (cohesionNeighbours.Count == 0)
         {
             speed = assignedFlock.minSpeed;
             return;
+        }
+        for (int i = 0; i < cohesionNeighbours.Count; i++)
+        {
+            speed += cohesionNeighbours[i].speed;
         }
         speed /= cohesionNeighbours.Count;
         speed = Mathf.Clamp(speed, assignedFlock.minSpeed, assignedFlock.maxSpeed);
@@ -99,9 +109,14 @@ public class FlockUnit : MonoBehaviour
 
     private Vector3 CalculateAvoidanceVector()
     {
+        var avoidanceVector = Vector3.zero;
         if (avoidanceNeighbours.Count == 0)
         {
             return avoidanceVector;
+        }
+        for (int i = 0; i < avoidanceNeighbours.Count; i++)
+        {
+            avoidanceVector += (myTransform.position - avoidanceNeighbours[i].myTransform.position);
         }
         avoidanceVector /= avoidanceNeighbours.Count;
         avoidanceVector = avoidanceVector.normalized;
@@ -109,12 +124,16 @@ public class FlockUnit : MonoBehaviour
         return avoidanceVector;
     }
 
-
     private Vector3 CalculateAlignmentVector()
     {
+        var alignmentVector = myTransform.forward;
         if (alignmentNeighbours.Count == 0)
         {
             return alignmentVector;
+        }
+        for (int i = 0; i < alignmentNeighbours.Count; i++)
+        {
+            alignmentVector += alignmentNeighbours[i].myTransform.forward;
         }
         alignmentVector /= alignmentNeighbours.Count;
         alignmentVector = alignmentVector.normalized;
@@ -131,11 +150,16 @@ public class FlockUnit : MonoBehaviour
 
     private Vector3 CalculateCohesionVector()
     {
+        var cohesionVector = Vector3.zero;
+
         if (cohesionNeighbours.Count == 0)
         {
             return cohesionVector;
         }
-
+        for (int i = 0; i < cohesionNeighbours.Count; i++)
+        {
+            cohesionVector += cohesionNeighbours[i].myTransform.position;
+        }
         cohesionVector /= cohesionNeighbours.Count;
         cohesionVector -= myTransform.position;
         cohesionVector = cohesionVector.normalized;
