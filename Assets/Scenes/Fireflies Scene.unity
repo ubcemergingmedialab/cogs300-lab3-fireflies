@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -226,7 +226,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1094348382}
   - component: {fileID: 1094348381}
-  - component: {fileID: 1094348383}
   m_Layer: 0
   m_Name: Flock
   m_TagString: Untagged
@@ -274,32 +273,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1094348383
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094348380}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0e35a3ea86702e4189be2a1a86221b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firefly: {fileID: 2022618221024583113, guid: ecb7e107760de284ca54a645c555059e, type: 3}
-  spawnNumber: 200
-  _sightDistance: 2
-  _delayMultiplier: 0.16
-  _minSpeed: 5
-  _maxSpeed: 8
-  _cohesionDistance: 5
-  _alignmentDistance: 7
-  _avoidanceDistance: 2
-  _boundsDistance: 7
-  _cohesionWeight: 2.1
-  _alignmentWeight: 0.7
-  _avoidanceWeight: 3
-  _boundsWeight: 0.2
 --- !u!1 &1710065375
 GameObject:
   m_ObjectHideFlags: 0
